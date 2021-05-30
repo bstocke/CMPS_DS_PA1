@@ -1,0 +1,159 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>CMPS 260: Module 3 Programming Project</title>
+<style>* { font-family: monospace; }</style>
+<script>
+
+// NOTE: You must implement the data structures using the prototype approach.
+//       This is not what the book uses, so you have to convert it.
+//       See also: https://it.pointpark.edu/tutorials/no-prototype-vs-prototype/
+
+// NOTE: Please review the following links regularly:
+//       https://it.pointpark.edu/tutorials/arrays-vs-objects/
+//       https://it.pointpark.edu/tutorials/no-prototype-vs-prototype/
+//       https://it.pointpark.edu/tutorials/implementation-vs-interface/
+
+
+
+//---------//
+// Project //
+//---------//
+console.log("Project");
+
+// 1. Implement the linked list data structure using the prototype.
+
+var MyLinkedList = function(val) {
+  this.head = {
+    val: val,
+    next: null
+  };
+  this.length = 1;
+};
+
+MyLinkedList.prototype.addAtHead = function(value) {
+  var newNode = {
+    val: value,
+  }
+  newNode.next = this.head;
+  this.head = newNode;
+  this.length++;
+  return this;
+};
+var test = new MyLinkedList(3);
+console.log(test);
+var test2 = test.addAtHead(12);
+console.log(test2);
+var test3 = test2.addAtHead(4);
+console.log(test3);
+
+// add the prototype methods
+// ...
+
+// 2. Linked lists are often used for problems where a lot of information can
+//    be shared in a certain way. For example,su ppose we have the following
+//    directions involving 7 different landmarks:
+//       1. A1 -> B -> C -> D -> E
+//       2. A2 -> B -> C -> D -> E
+//       3. A3 -> A4 -> C -> D -> E
+//    As you can see, all of these chains have a lot in common. They start out
+//    as three separate linked lists but converge into one that ends with
+//    C -> D -> E. We will implement this but need to make some modifications.
+
+// creating the landmarks
+function Landmark(name) {
+  this.name = name;
+  // this would normally store more information, such as location
+}
+
+var a1 = new Landmark("A1");
+var a2 = new Landmark("A2");
+var a3 = new Landmark("A3");
+var a4 = new Landmark("A4");
+var b = new Landmark("B");
+var c = new Landmark("C");
+var d = new Landmark("D");
+var e = new Landmark("E");
+
+var list1 = new LinkedList();
+var list2 = new LinkedList();
+var list3 = new LinkedList();
+
+// 1. Store the landmarks for directions (1) in list1 using append.
+this.append = function(element) {
+    // add a new item to the end of the list
+    // ...
+    let node = new Node(element),
+    current;
+
+    if (head === null) {
+      head = node 
+    } else {
+      current = head;
+    
+      while(current.next){
+        current = current.next;
+      }
+      current.next = node;
+    }
+    length++;
+  };
+
+list1.append(a1);
+list1.append(a2);
+list1.append(a3);
+list1.append(a4);
+list1.append(b);
+list1.append(c);
+list1.append(d);
+list1.append(e);
+// 2. Store the landmarks for directions (2) in list2, but only include A2 for
+//    now (so do NOT add B, C, D, and E just yet).
+list2.append(a2);
+
+// 3. Implement a getNodeAt(position) method (using the prototype) that returns
+//    the node in a linked list at a given position (make sure to return the
+//    node and not the element!).
+LinkedList.prototype.getAt = function(index){
+        let counter = 0;
+        let node = this.head;
+        while (node) {
+            if (counter === index) {
+               return node;
+            }
+            counter++;
+            node = node.next;
+        }
+        return null;
+    }
+
+// 4. Implement an appendNode(node) method (using the prototype) that appends a
+//    node to a linked list (as opposed to an element!).
+Node.appendChild(c);
+
+// 5. Uncomment the lines below and make sure the correct directions are
+//    printed (see above).
+
+var tmpNode = list1.getNodeAt(1); // NOTE: this is the node containing B
+list2.appendNode(tmpNode); // append 'node B' to 'node A2'
+list1.print();
+list2.print();
+
+// 6. Follow the same steps for directions (3). First add A3 and A4 to list3,
+//    then get the third node (second position) from list1, and append this
+//    node to list3.
+list3.append(a3);
+list3.append(a4);
+list3.append(a2);
+
+// 7. What is the problem with the size() method? How can you fix this?
+//The problem with the size method is thatit limits the size of the linked list, this can be fix by adjusting the size.
+
+
+</script>
+</head>
+<body>
+  See console!
+</body>
+</html>
