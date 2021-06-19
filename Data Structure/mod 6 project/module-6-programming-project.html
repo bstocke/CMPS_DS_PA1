@@ -1,0 +1,167 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>CMPS 260: Module 6 Programming Project</title>
+<style>* { font-family: monospace; }</style>
+<script>
+
+// NOTE: You must implement the data structures using the prototype approach.
+//       This is not what the book uses, so you have to convert it.
+//       See also: https://it.pointpark.edu/tutorials/no-prototype-vs-prototype/
+
+// NOTE: Please review the following links regularly:
+//       https://it.pointpark.edu/tutorials/arrays-vs-objects/
+//       https://it.pointpark.edu/tutorials/no-prototype-vs-prototype/
+//       https://it.pointpark.edu/tutorials/implementation-vs-interface/
+
+
+
+//---------//
+// Project //
+//---------//
+console.log("Project");
+
+// 1. Implement the ArrayList using the prototype.
+Array.prototype.myUcase = function() {
+  var i;
+  for (i = 0; i < this.length; i++) {
+    this[i] = this[i].toUpperCase();
+  }
+};
+
+// 2. Complete the createNonSortedRandomArray(size) below by returning an
+//    ArrayList with the numbers 1, 2, ..., size in random order.
+//    NOTE: there are multiple ways to achieve this.
+
+for (var a=[],i=0;i<40;++i) a[i]=i;
+
+
+function shuffle(array) {
+  var tmp, current, top = array.length;
+  if(top) while(--top) {
+    current = Math.floor(Math.random() * (top + 1));
+    tmp = array[current];
+    array[current] = array[top];
+    array[top] = tmp;
+  }
+  return array;
+}
+
+a = shuffle(a);
+// 3. Implement the Quick Sort algorithm and test your code with the function
+//    you wrote for (2).
+function partition(arr, start, end){
+    // Taking the last element as the pivot
+    const pivotValue = arr[end];
+    let pivotIndex = start; 
+    for (let i = start; i < end; i++) {
+        if (arr[i] < pivotValue) {
+        // Swapping elements
+        [arr[i], arr[pivotIndex]] = [arr[pivotIndex], arr[i]];
+        // Moving to next element
+        pivotIndex++;
+        }
+    }
+    
+    // Putting the pivot value in the middle
+    [arr[pivotIndex], arr[end]] = [arr[end], arr[pivotIndex]] 
+    return pivotIndex;
+};
+
+function quickSortRecursive(arr, start, end) {
+    // Base case or terminating case
+    if (start >= end) {
+        return;
+    }
+    
+    // Returns pivotIndex
+    let index = partition(arr, start, end);
+    
+    // Recursively apply the same logic to the left and right subarrays
+    quickSort(arr, start, index - 1);
+    quickSort(arr, index + 1, end);
+}
+
+quickSortRecursive(array, 0, array.length - 1)
+// 4. Implement searching using the prototype.
+array.search(regexp)
+
+function testinput(re, str) {
+  var midstring;
+  if (str.search(re) != -1) {
+    midstring = ' contains ';
+  } else {
+    midstring = ' does not contain ';
+  }
+  console.log(str + midstring + re);
+}
+// 5. Implement the binary search algorithm and test your code.
+let recursiveFunction = function (arr, x, start, end) {
+       
+       // Base Condition
+       if (start > end) return false;
+      
+       // Find the middle index
+       let mid=Math.floor((start + end)/2);
+      
+       // Compare mid with given key x
+       if (arr[mid]===x) return true;
+             
+       // If element at mid is greater than x,
+       // search in the left half of mid
+       if(arr[mid] > x) 
+           return recursiveFunction(arr, x, start, mid-1);
+       else
+     
+           // If element at mid is smaller than x,
+           // search in the right half of mid
+           return recursiveFunction(arr, x, mid+1, end);
+   }
+      
+   // Driver code
+   let x = 5;
+      
+   if (recursiveFunction(arr, x, 0, arr.length-1))
+       document.write("Element found!<br>");
+   else document.write("Element not found!<br>");
+      
+   x = 6;
+      
+   if (recursiveFunction(arr, x, 0, arr.length-1))
+       document.write("Element found!<br>");
+   else document.write("Element not found!<br>");
+
+// The following set of steps come from an earlier homework.
+// The following text is from the all the Amendments in the Bill of Rights.
+var text = "Congress shall make no law respecting an establishment of religion, or prohibiting the free exercise thereof; or abridging the freedom of speech, or of the press; or the right of the people peaceably to assemble, and to petition the Government for a redress of grievances. A well regulated Militia, being necessary to the security of a free State, the right of the people to keep and bear Arms, shall not be infringed. No Soldier shall, in time of peace be quartered in any house, without the consent of the Owner, nor in time of war, but in a manner to be prescribed by law. The right of the people to be secure in their persons, houses, papers, and effects, against unreasonable searches and seizures, shall not be violated, and no Warrants shall issue, but upon probable cause, supported by Oath or affirmation, and particularly describing the place to be searched, and the persons or things to be seized. No person shall be held to answer for a capital, or otherwise infamous crime, unless on a presentment or indictment of a Grand Jury, except in cases arising in the land or naval forces, or in the Militia, when in actual service in time of War or public danger; nor shall any person be subject for the same offence to be twice put in jeopardy of life or limb; nor shall be compelled in any criminal case to be a witness against himself, nor be deprived of life, liberty, or property, without due process of law; nor shall private property be taken for public use, without just compensation. In all criminal prosecutions, the accused shall enjoy the right to a speedy and public trial, by an impartial jury of the State and district wherein the crime shall have been committed, which district shall have been previously ascertained by law, and to be informed of the nature and cause of the accusation; to be confronted with the witnesses against him; to have compulsory process for obtaining witnesses in his favor, and to have the Assistance of Counsel for his defence. In Suits at common law, where the value in controversy shall exceed twenty dollars, the right of trial by jury shall be preserved, and no fact tried by a jury, shall be otherwise re-examined in any Court of the United States, than according to the rules of the common law. Excessive bail shall not be required, nor excessive fines imposed, nor cruel and unusual punishments inflicted. The enumeration in the Constitution, of certain rights, shall not be construed to deny or disparage others retained by the people. The powers not delegated to the United States by the Constitution, nor prohibited by it to the States, are reserved to the States respectively, or to the people.";
+// First we make the text lower case.
+text = text.toLowerCase();
+// Then we remove punctuation by using a regular expression.
+text = text.replace(/[.,;]/g, "");
+// And store the words into an array.
+var textArray = text.split(" ");
+
+// 6. Use sorting and searching to find out whether the word 'president'
+//    appears in the amendments. You should use the code you wrote above.
+const found = textArray.find('president');
+
+console.log(found);
+// 7. Use sorting and searching to find out whether the word 'state' appears
+//    in the amendments. You should use the code you wrote above.
+const found2 = textArray.find('state');
+
+console.log(found2);
+// 8. Use sorting and searching to find out whether the word 'country' appears
+//    in the amendments. You should use the code you wrote above.
+const found3 = textArray.find('country');
+
+console.log(found3);
+
+
+</script>
+</head>
+<body>
+  See console!
+</body>
+</html>
