@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>CMPS 260: Module 7 Programming Project</title>
+<style>* { font-family: monospace; }</style>
+<script>
+
+// NOTE: You must implement the data structures using the prototype approach.
+//       This is not what the book uses, so you have to convert it.
+//       See also: https://it.pointpark.edu/tutorials/no-prototype-vs-prototype/
+
+// NOTE: Please review the following links regularly:
+//       https://it.pointpark.edu/tutorials/arrays-vs-objects/
+//       https://it.pointpark.edu/tutorials/no-prototype-vs-prototype/
+//       https://it.pointpark.edu/tutorials/implementation-vs-interface/
+
+
+
+//---------//
+// Project //
+//---------//
+console.log("Project");
+
+// 1. Implement factorial using a recursive function and test your code.
+function factorial(n){
+
+    if(n == 0 || n == 1){
+        return 1;
+   
+    }else{
+        return n * factorial(n-1);
+    }
+}
+let n = 4;
+answer = factorial(n)
+console.log("The factorial of " + n + " is " + answer);
+
+// 2. Implement a function that returns the complete fibonacci sequence in an
+//    array for a given number.
+fib = function(numMax){
+    for(var fibArray = [0,1], i=0,j=1,k=0; k<numMax;i=j,j=x,k++ ){
+        x=i+j;
+        fibArray.push(x);
+    }
+    console.log(fibArray);
+}
+
+fib(10)
+// 3. Implement finding the longest common subsequence using dynamic
+//    programming. Test your code.
+function longestCommonSubsequence(s1, s2) {
+  const arr1 = [...s1]
+  const arr2 = [...s2]
+
+ 
+  let matrix = [...Array(arr1.length+1)].map(e => Array(arr2.length+1).fill(0))
+
+  
+  for(let i = 1; i <= arr1.length; i++) {
+      for(let j = 1; j <= arr2.length; j++) {
+          if(arr1[i-1] == arr2[j-1]) { matrix[i][j] = matrix[i-1][j] + 1}
+          else matrix[i][j] = Math.max(matrix[i-1][j], matrix[i][j-1])
+      }
+  }
+
+  // return the max which is at the right bottom corner of the matrix
+  return matrix[matrix.length-1][matrix[0].length-1]
+}
+ 
+// 4. Solve the problem of summing all the numbers in an array using
+//    imperative style.
+var array = [1, 2, 3, 4, 5],
+    sum = 0,
+    prod = 1,
+    i;
+for (i = 0; i < array.length; i += 1) {
+    sum += array[i];
+    prod *= array[i];
+}
+console.log(sum + ' ' + prod);
+
+// 5. Solve the problem of summing all the numbers in an array using
+//    functional style.
+console.log(
+  [1, 2, 3, 4].reduce((a, b) => a + b, 0)
+)
+
+// 6. Solve problem 14 of Project Euler: https://projecteuler.net/problem=14
+//    Note: This may be a bit challenging. Try to get as far as you can.
+//          Instead of one million you could use a smaller number for testing.
+
+function longestCollatzSequence(limit) {
+    let longestSequenceLength = 0;
+    let startingNum = 0;
+    
+    const getSequenceLength = num => {
+        let sequence = [num];
+        
+        while (num > 1) {
+            if (num % 2 === 0) {
+                num = num / 2;
+            } else {
+                num = num * 3 + 1;
+            }
+            sequence.push(num);
+        }
+        
+        return sequence.length;
+    }
+    
+    for (let i = 2; i < limit; i++) {
+        if (getSequenceLength(i) > longestSequenceLength) {
+            longestSequenceLength = getSequenceLength(i);
+            startingNum = i;
+        }
+    }
+    
+    
+    return startingNum;
+}
+
+longestCollatzSequence(14); // 9
+longestCollatzSequence(5847); // 3711
+longestCollatzSequence(46500); // 35655
+longestCollatzSequence(54512); // 52527
+longestCollatzSequence(1000000); // 837799
+
+
+
+</script>
+</head>
+<body>
+  See console!
+</body>
+</html>
