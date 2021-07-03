@@ -1,0 +1,259 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>CMPS 260: Module 8 Programming Project</title>
+<style>* { font-family: monospace; }</style>
+<script>
+
+// NOTE: You must implement the data structures using the prototype approach.
+//       This is not what the book uses, so you have to convert it.
+//       See also: https://it.pointpark.edu/tutorials/no-prototype-vs-prototype/
+
+// NOTE: Please review the following links regularly:
+//       https://it.pointpark.edu/tutorials/arrays-vs-objects/
+//       https://it.pointpark.edu/tutorials/no-prototype-vs-prototype/
+//       https://it.pointpark.edu/tutorials/implementation-vs-interface/
+
+
+
+//---------//
+// Project //
+//---------//
+console.log("Project");
+
+// 1. What is the worst case complexity of the following function?
+
+function hasDuplicates(arr) {
+  for (var i = 0; i < arr.length; i++) {
+    for (var j = 0; j < arr.length; j++) {
+      if (i !== j && arr[i] === arr[j]) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+//The worst-case complexity of the function is O(n2).
+
+// 2. Implement a faster version of the same function and analyze the
+//    complexity of this approach.
+
+function hasDuplicatesFast(arr) {
+ var i = arr.length, j, val;
+
+    while (i--) {
+        val = arr[i];
+        j = i;
+        while (j--) {
+            if (arr[j] === val) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+// 3. The travelling salesman problem is a another classic problem and we are
+//    going to solve it using a greedy algorithm. Before starting, please read
+//    through the article on Wikipedia:
+//      https://en.wikipedia.org/wiki/Travelling_salesman_problem
+//    Then implement the following:
+//    (a) Create a graph that represents the example symmetric TSP problem on
+//        the Wikipedia page.
+//    (b) Implement a greedy search that finds the shortest path. You should
+//        have the following steps: (1) pick node A as the starting position,
+//        (2) pick the closest neighbor that has not been visited as the next
+//        city to visit, (3) continue this process until returning to A,
+//        (4) print the final length of the path and also the sequence of
+//        the cities.
+//    (c) Check your results, do they make sense? Is is the optimal solution?
+function Triangle(a, b, c) {
+this.a = a
+this.b = b
+this.c = c
+
+var A = b.x - a.x,
+B = b.y - a.y,
+C = c.x - a.x,
+D = c.y - a.y,
+E = A * (a.x + b.x) + B * (a.y + b.y),
+F = C * (a.x + c.x) + D * (a.y + c.y),
+G = 2 * (A * (c.y - b.y) - B * (c.x - b.x)),
+minx, miny, dx, d
+  
+if(Math.abs(G) < 0.000001) {
+minx = Math.min(a.x, b.x, c.x)
+miny = Math.min(a.y, b.y, c.y)
+dx = (Math.max(a.x, b.x, c.x) - minx) * 0.5
+dy = (Math.max(a.y, b.y, c.y) - miny) * 0.5
+
+this.x = minx + dx
+this.y = miny + dy
+this.r = dx * dx + dy * dy
+}
+
+else {
+this.x = (D*E - B*F) / G
+this.y = (A*F - C*E) / G
+dx = this.x - a.x
+dy = this.y - a.y
+this.r = dx * dx + dy * dy
+}
+}
+
+Triangle.prototype.draw = function(ctx) {
+ctx.beginPath()
+ctx.moveTo(this.a.x, this.a.y)
+ctx.lineTo(this.b.x, this.b.y)
+ctx.lineTo(this.c.x, this.c.y)
+ctx.closePath()
+ctx.stroke()
+}
+
+function byX(a, b) {
+return b.x - a.x
+}
+
+function dedup(edges) {
+var j = edges.length,
+a, b, i, m, n
+
+outer: while(j) {
+b = edges[--j]
+a = edges[--j]
+i = j
+while(i) {
+n = edges[--i]
+m = edges[--i]
+if((a === m && b === n) || (a === n && b === m)) {
+edges.splice(j, 2)
+edges.splice(i, 2)
+j -= 2
+continue outer
+}
+}
+}
+}
+
+function triangulate(vertices) {
+  
+if(vertices.length < 3)
+return []
+
+
+vertices.sort(byX)
+
+var i = vertices.length - 1,
+xmin = vertices[i].x,
+xmax = vertices[0].x,
+ymin = vertices[i].y,
+ymax = ymin
+
+while(i--) {
+if(vertices[i].y < ymin) ymin = vertices[i].y
+if(vertices[i].y > ymax) ymax = vertices[i].y
+}
+
+
+var dx = xmax - xmin,
+dy = ymax - ymin,
+dmax = (dx > dy) ? dx : dy,
+xmid = (xmax + xmin) * 0.5,
+ymid = (ymax + ymin) * 0.5,
+open = [
+new Triangle(
+{x: xmid - 20 * dmax, y: ymid - dmax, __sentinel: true},
+{x: xmid , y: ymid + 20 * dmax, __sentinel: true},
+{x: xmid + 20 * dmax, y: ymid - dmax, __sentinel: true}
+)
+],
+closed = [],
+edges = [],
+j, a, b
+
+
+i = vertices.length
+while(i--) {
+  
+edges.length = 0
+j = open.length
+while(j--) {
+
+if(dx > 0 && dx * dx > open[j].r) {
+closed.push(open[j])
+open.splice(j, 1)
+continue
+}
+
+/* If not, skip this triangle. */
+dy = vertices[i].y - open[j].y
+if(dx * dx + dy * dy > open[j].r)
+continue
+
+
+edges.push(
+open[j].a, open[j].b,
+open[j].b, open[j].c,
+open[j].c, open[j].a
+)
+open.splice(j, 1)
+}
+
+/* Remove any doubled edges. */
+dedup(edges)
+
+  
+j = edges.length
+while(j) {
+b = edges[--j]
+a = edges[--j]
+open.push(new Triangle(a, b, vertices[i]))
+}
+}
+
+Array.prototype.push.apply(closed, open)
+
+i = closed.length
+while(i--)
+if(closed[i].a.__sentinel ||
+closed[i].b.__sentinel ||
+closed[i].c.__sentinel)
+closed.splice(i, 1)
+
+return closed
+}
+
+if (typeof module !== 'undefined') {
+module.exports = {
+Triangle: Triangle,
+triangulate: triangulate
+}
+}
+// 4. Solve https://csacademy.com/contest/interview-archive/task/intersecting-rectangles/
+//    What is the runtime complexity of your solution?
+//    HINT: Try to break down the problems into smaller steps. For example,
+//          find a convenient way to represent rectangles and define a function
+//          that tests whether one rectangle is inside another. Then test your
+//          code on just two rectangles first to make sure it works.
+
+CoordinateArea A = new CoordinateArea(-500, -500, +1000, +1000);
+CoordinateArea B = new CoordinateArea(-500, -500, +1000, +1000);  // same limits for A, B
+
+A.AddRectangles(listA);
+B.AddRectangles(listB);
+
+for (int i = 0; i < listA.Squares.Count; i++)
+{
+    RectangleSet setA = A[i];
+    RectangleSet setB = B[i];
+
+    // *** small number of rectangles, which you can now check thoroghly for overlaps ***
+
+}
+</script>
+</head>
+<body>
+  See console!
+</body>
+</html>
