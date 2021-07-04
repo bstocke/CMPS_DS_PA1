@@ -1,0 +1,222 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>CMPS 260: Module 8 Programming Assignment</title>
+<style>* { font-family: monospace; }</style>
+<script>
+
+// NOTE: You must implement the data structures using the no prototype approach.
+//       This is what the book uses, so you can copy it.
+//       See also: https://it.pointpark.edu/tutorials/no-prototype-vs-prototype/
+
+// NOTE: Please review the following links regularly:
+//       https://it.pointpark.edu/tutorials/arrays-vs-objects/
+//       https://it.pointpark.edu/tutorials/no-prototype-vs-prototype/
+//       https://it.pointpark.edu/tutorials/implementation-vs-interface/
+
+
+
+//----------------//
+// Big O notation //
+//----------------//
+console.log("Big O notation");
+
+// 1. Analyze the complexity of the isPalindrome function below. Make a
+//    distinction between best, worst, and average case complexity.
+
+function isPalindrome(str) {
+  for (var i = 0; i < str.length/2; i++) {
+    if (str[i] !== str[str.length-i-1]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+// O(N+3) == O(N)
+// The worst case is when the set being serached is in multiple layers of complexity to find. While the best case is not having to go through any complexity. When the average case is about 1 layer of dcomplex or on the same layer of complexity
+
+
+
+// 2. Write a program that finds the minimum element in a stack in O(1) time
+//    complexity. Note that earlier solutions searched through the elements on
+//    the stack but that leads to an O(n) solution.
+//    NOTE: this question is sometimes asked on interviews.
+
+const items = Symbol('Stack items');
+
+
+class Stack {
+  constructor() {
+    this[items] = [];
+  } 
+
+  pop() {
+    return this[items].pop();
+  }
+
+  push(data) {
+    this[items].push(data);
+  }
+
+  size() {
+    return this[items].length;
+  }
+
+  isEmpty() {
+    return this.size() === 0;
+  }
+
+  peek() {
+    return this[items][this.size() - 1];
+  }
+}
+
+class MinStack {
+  constructor(iterable) {
+    this.stack = new Stack();
+    this.minStack = new Stack();
+    if (iterable) {
+      for (let val of iterable) {
+        this.push(val);
+      }
+    }
+  } 
+
+  min() {
+    if (this.stack.isEmpty()) {
+      throw new Error('Min of empty stack');    
+    }
+    return this.minStack.peek();
+  }
+
+  pop() {
+    if (this.stack.isEmpty()) {
+      throw new Error('Popping from empty stack');  
+    }
+    let val = this.stack.pop();
+    if (val === this.minStack.peek()) {
+      this.minStack.pop();
+    }
+    return val;
+  }
+
+  push(data) {
+    if (this.minStack.isEmpty() && this.stack.isEmpty()) {
+      this.minStack.push(data);
+    } else if (data <= this.minStack.peek()) {
+      this.minStack.push(data);
+    }
+    this.stack.push(data);
+  }
+
+  size() {
+    return this.stack.size();
+  }
+
+  isEmpty() {
+    return this.stack.isEmpty();
+  }
+
+  peek() {
+    return this.stack.peek();
+  }
+}
+
+
+const s = new MinStack();
+
+console.log('//  Empty Stack  //');
+try {
+  console.log(s.min()); // Err
+} catch (err) {
+  console.log('Err: ' + err.message);
+}
+
+
+console.log('// Non-Empty Stack  //');
+s.push(1);
+s.push(2);
+s.push(3);
+
+console.log(s.pop() === 3);
+console.log(s.min() === 1);
+console.log(s.pop() === 2);
+console.log(s.min() === 1);
+console.log(s.pop() === 1);
+try {
+  console.log(s.min()); // Err
+} catch (err) {
+  console.log('Err: ' + err.message); // Err
+}
+
+console.log('// Using iterator  //');
+
+const s2 = new MinStack([3, 2, 5, 1]);
+console.log(s2.min() === 1);
+console.log(s2.pop() === 1);
+console.log(s2.min() === 2);
+console.log(s2.pop() === 5);
+console.log(s2.min() === 2);
+console.log(s2.pop() === 2);
+console.log(s2.min() === 3);
+console.log(s2.pop() === 3);
+
+//----------------------------//
+// Having fun with algorithms //
+//----------------------------//
+console.log("Having fun with algorithms");
+
+// 1. Solve Project Euler problem 1 (https://projecteuler.net/problem=1).
+
+function multiplesOf3and5(number) {
+	// establish a global total and set initial value to 0
+	let total = 0
+	// loop through all values from 0 to given number	
+  for(let i = 0; i <= number; i++) {
+		// Get remainder of i and 3
+		let remainderFor3 = i % 3;
+		// Get remainder of i and 5
+		let remainderFor5 = i % 5;
+		// check if remainder for 3 or 5
+		if(remainderFor3 == 0 || remainderFor5 == 0) {
+			// If true, that means i is a multiple of 3
+			// add it to the total
+			total = total + i
+		}
+	}
+	// return our total number
+	return total
+}
+
+// 2. Solve Project Euler problem 2 (https://projecteuler.net/problem=2).
+function fiboEvenSum(n) {
+	// setup placeholders for our three values
+  let fibNumSum = 0; // product of our two numbers
+  let fibCurrent = 0; // current number
+  let fibNext = 1; // next number
+  for (let i = 1; i <= n; i++) {
+    // find next number
+    let fibTotal = fibCurrent + fibNext;
+    // set first number to second number
+    fibCurrent = fibNext;
+    // set second number to total
+    fibNext = fibTotal;
+		// make sure the value is even
+    if (fibTotal % 2 == 0) {
+      fibNumSum += fibTotal;
+    }
+  }
+  // You can do it!
+  return fibNumSum;
+}
+fiboEvenSum(10); //44
+
+
+</script>
+</head>
+<body>
+  See console!
+</body>
+</html>
